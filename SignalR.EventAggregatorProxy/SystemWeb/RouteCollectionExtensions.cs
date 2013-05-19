@@ -6,16 +6,23 @@ using SignalR.EventAggregatorProxy.Event;
 namespace SignalR.EventAggregatorProxy.SystemWeb
 {
     public static class RouteCollectionExtensions
-    {
-        public static void MapEventProxy<TEvent>(this RouteCollection routes)
+    {        
+        public static void MapEventProxy<TEvent>(this RouteCollection routes, 
+            string overrideUrl = null,
+            RouteValueDictionary overrideDefaults = null, 
+            IRouteHandler overrideHandler = null,
+            RouteValueDictionary overrideConstraints = null)
         {
-            var locator = new Lazy<ITypeFinder>(() => new TypeFinder<TEvent>());
-            GlobalHost.DependencyResolver.Register(typeof(ITypeFinder), () => locator.Value);
+            var url = overrideUrl ?? "eventAggregation/events";
+            var defaults = overrideDefaults ?? new RouteValueDictionary();
+            var routeHandler = overrideHandler ?? new EventScriptRouteHandler<TEvent>();
+            var constraints = overrideConstraints ?? new RouteValueDictionary() { { "controller", string.Empty } };
 
             routes.Add(new Route(
-                           "eventAggregation/events",
-                           new EventScriptRouteHandler<TEvent>()
-                           ));
+                url: "eventAggregation/events", 
+                defaults: defaults,
+                constraints: constraints,
+                routeHandler: routeHandler));
         }
     }
 }

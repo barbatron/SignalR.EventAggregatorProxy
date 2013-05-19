@@ -15,7 +15,7 @@ namespace SignalR.EventAggregatorProxy.EventAggregation
     public class EventProxy
     {
         private readonly ITypeFinder typeFinder;
-        private readonly IDictionary<Type, List<Subscription>> subscriptions;
+        private readonly IDictionary<Type, List<EventSubscription>> subscriptions;
         private readonly IDictionary<string, List<Type>> userSubscriptions;
 
         public EventProxy()
@@ -24,7 +24,7 @@ namespace SignalR.EventAggregatorProxy.EventAggregation
             var eventAggregator = GlobalHost.DependencyResolver.Resolve<IEventAggregator>();
             subscriptions = typeFinder
                 .ListEventTypes()
-                .ToDictionary(t => t, t => new List<Subscription>());
+                .ToDictionary(t => t, t => new List<EventSubscription>());
 
             userSubscriptions = new Dictionary<string, List<Type>>();
 
@@ -34,7 +34,7 @@ namespace SignalR.EventAggregatorProxy.EventAggregation
         public void Subscribe(HubCallerContext context, string typeName, dynamic constraint)
         {
             var type = typeFinder.GetType(typeName);
-            subscriptions[type].Add(new Subscription(context.ConnectionId, context.User.Identity.Name, constraint));
+            subscriptions[type].Add(new EventSubscription(context.ConnectionId, context.User.Identity.Name, constraint));
             if (!userSubscriptions.ContainsKey(context.ConnectionId))
             {
                 userSubscriptions[context.ConnectionId] = new List<Type>();

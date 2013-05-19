@@ -7,6 +7,7 @@ namespace SignalR.EventAggregatorProxy.Event
     public interface ITypeFinder
     {
         IEnumerable<Type> ListEventTypes();
+        bool KnowsType(string type);
         Type GetType(string type);
         Type GetConstraintHandlerType(Type type);
     }

@@ -5,17 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using SignalR.EventAggregatorProxy.EventAggregation;
+using SignalR.EventAggregatorProxy.CommandBus;
 
 namespace SignalR.EventAggregatorProxy.Hubs
 {
     public class EventAggregatorProxyHub : Hub
     {
         private static readonly EventProxy eventProxy;
+        private static readonly CommandProxy commandProxy;
 
         static EventAggregatorProxyHub()
         {
             eventProxy = new EventProxy();
+            try
+            {
+                commandProxy = GlobalHost.DependencyResolver.Resolve<CommandProxy>();
+            }
+            catch
+            {
+            }
+            commandProxy = commandProxy ?? new CommandProxy();
         }
+
+        #region Events
 
         public void Subscribe(string type, dynamic contraint)
         {
@@ -32,5 +44,16 @@ namespace SignalR.EventAggregatorProxy.Hubs
             eventProxy.UnsubscribeConnection(Context.ConnectionId);
             return base.OnDisconnected();
         }
+
+        #endregion
+        #region Commands
+        
+        public void Submit(string topic, object data)
+        {
+            commandProxy.Submit(Context, topic, data);
+        }
+        
+        #endregion
+
     }
 }

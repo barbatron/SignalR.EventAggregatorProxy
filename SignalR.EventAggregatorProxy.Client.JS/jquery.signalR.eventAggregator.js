@@ -11,11 +11,15 @@
             if (constructor.__subscribers === undefined) {
                 constructor.__subscribers = [];
             }
-
             return constructor.__subscribers;
         }
 
         return {
+            submit: function (type, data) {
+                if (this.proxy) {
+                    this.proxy.submit(type, data);
+                }
+            },
             unsubscribe: function (context) {
                 $.each(context.__subscribedMessages, function () {
                     var index = -1;

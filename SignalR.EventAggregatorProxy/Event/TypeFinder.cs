@@ -47,6 +47,11 @@ namespace SignalR.EventAggregatorProxy.Event
             return types.Values;
         }
 
+        public bool KnowsType(string type)
+        {
+            return types.ContainsKey(type);
+        }
+
         public Type GetType(string type)
         {
             return types[type];

@@ -50,7 +50,7 @@
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Owin">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -65,13 +65,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\VersionInfo.cs">
-      <Link>VersionInfo.cs</Link>
-    </Compile>
+    <Compile Include="CommandBus\CommandProxy.cs" />
+    <Compile Include="CommandBus\CommandSubscription.cs" />
+    <Compile Include="CommandBus\IClientCommandBus.cs" />
+    <Compile Include="CommandBus\IRawCommandHandler.cs" />
+    <Compile Include="CommandBus\RawCommand.cs" />
     <Compile Include="EventAggregation\IEventAggregator.cs" />
     <Compile Include="EventAggregation\EventProxy.cs" />
     <Compile Include="EventAggregation\IEventConstraintHandler.cs" />
-    <Compile Include="EventAggregation\Subscription.cs" />
+    <Compile Include="EventAggregation\EventSubscription.cs" />
     <Compile Include="Event\ITypeFinder.cs" />
     <Compile Include="Event\TypeFinder.cs" />
     <Compile Include="Hubs\EventAggregatorProxyHub.cs" />
